@@ -1,2 +1,2 @@
 # popup-system
-Implemented simple popup system for 2d apps
+This is a Unity project featuring a robust popup system that implements a flexible and reusable architecture for displaying various types of popups with animations, particle effects, and queuing functionality. The system includes a base popup class with customizable animations and skin support, a popup manager for handling multiple popups, and a queue system to ensure popups are displayed sequentially.
