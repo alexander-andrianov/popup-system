@@ -1,44 +1,40 @@
 using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Interfaces;
 using Content.Scripts.Scenes.Root.Layouts;
-using UniRx;
+using Content.Scripts.Scenes.Popups;
 using UnityEngine;
 
 namespace Content.Scripts.Scenes.Root.View
 {
     public class RootViewController : MonoBehaviour
     {
-        private const float SwitchDuration = 1f;
-        
-        private readonly CompositeDisposable disposables = new CompositeDisposable();
-
         [Header("LAYOUTS")] 
         [SerializeField] private MainLayout mainLayout;
+        
+        [Header("MANAGERS")]
+        [SerializeField] private PopupManager popupManager;
+
+        private IScreenContext screenContext;
 
         private int currentLevelId;
 
         public async Task Initialize()
         {
-            InitializeLayouts();
-            InitializeObservableListeners();
+            await InitializeScreenContext();
             
-            await ShowLayoutView(currentLayout);
+            InitializeLayouts();
+            await ShowLayoutView(mainLayout);
+        }
+
+        private async Task InitializeScreenContext()
+        {
+            screenContext = new ScreenContext { PopupManager = popupManager };
+            await popupManager.InitializeAsync(screenContext);
         }
 
         private void InitializeLayouts()
         {
-            mainLayout.Initialize();
-        }
-
-        private void InitializeObservableListeners()
-        {
-            mainLayout.OnPlay.Subscribe(_ => HandleSwitch(LayoutType.ListLobby)).AddTo(disposables);
-            mainLayout.OnSettings.Subscribe(_ => HandleSwitch(LayoutType.Settings)).AddTo(disposables);
-            mainLayout.OnExit.Subscribe(HandleExit).AddTo(disposables);
-            mainLayout.OnPlay.Subscribe(_ => HandleSwitch(LayoutType.ListLobby)).AddTo(disposables);
-            mainLayout.OnSettings.Subscribe(_ => HandleSwitch(LayoutType.Settings)).AddTo(disposables);
-            mainLayout.OnExit.Subscribe(HandleExit).AddTo(disposables);
-            mainLayout.OnPlay.Subscribe(_ => HandleSwitch(LayoutType.ListLobby)).AddTo(disposables);
+            mainLayout.Initialize(screenContext);
         }
 
         private async Task ShowLayoutView(ILayout layout)

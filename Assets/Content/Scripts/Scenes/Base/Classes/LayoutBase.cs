@@ -30,7 +30,7 @@ namespace Content.Scripts.Scenes.Base.Classes
 
         public abstract void SetButtonsInteractable(bool value);
 
-        internal abstract void Initialize();
+        internal abstract void Initialize(IScreenContext screenContext);
 
         internal async Task HideLayout(Transform childTransform)
         {

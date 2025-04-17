@@ -1,8 +1,10 @@
 using Content.Scripts.Base.Enums;
+using Content.Scripts.Scenes.Base.Interfaces;
 
 namespace Content.Scripts.Scenes.Popups
 {
-    public abstract class PopupContext {
+    public class PopupContext {
         public PopupType PopupType { get; set; } = PopupType.Unknown;
+        public IScreenContext ScreenContext { get; set; }
     }
 }

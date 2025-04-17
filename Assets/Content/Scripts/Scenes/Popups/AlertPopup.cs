@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Enums;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,31 +12,23 @@ namespace Content.Scripts.Scenes.Popups
 {
     public class AlertPopup : AlertPopupBase
     {
-        [Header("BUTTONS")] [SerializeField] private Button acceptButton;
-
+        [Header("BUTTONS")]
+        [SerializeField] private Button acceptButton;
         [SerializeField] private Button retryButton;
-
         [SerializeField] private Button rejectButton;
-
         [SerializeField] private Button closeButton;
 
-        [Header("TEXTS")] [SerializeField] private Text acceptButtonText;
-
-        [SerializeField] private Text rejectButtonText;
-
-        [SerializeField] private Text retryButtonText;
-
-        [SerializeField] private Text messageText;
-
-        [SerializeField] private Text titleText;
+        [Header("TEXTS")]
+        [SerializeField] private TextMeshProUGUI acceptButtonText;
+        [SerializeField] private TextMeshProUGUI rejectButtonText;
+        [SerializeField] private TextMeshProUGUI retryButtonText;
+        [SerializeField] private TextMeshProUGUI mainTitleText;
+        [SerializeField] private TextMeshProUGUI headerTitleText;
 
         [Header("ICONS")] [SerializeField] private Image errorIcon;
-
         [Header("SPRITES")] [SerializeField] private Sprite dangerAcceptButtonSprite;
         
-        [Header("ERROR SPRITES")]
-        [SerializeField]
-        private List<ErrorSprite> errorSprites;
+        [Header("ERROR SPRITES")] [SerializeField] private List<ErrorSprite> errorSprites;
 
         private readonly ISubject<Unit> onAccept = new Subject<Unit>();
         private readonly ISubject<Unit> onRetry = new Subject<Unit>();
@@ -70,7 +63,7 @@ namespace Content.Scripts.Scenes.Popups
 
         private void SetTexts(AlertPopupContext popupContext)
         {
-            messageText.text = !string.IsNullOrEmpty(popupContext.Message)
+            mainTitleText.text = !string.IsNullOrEmpty(popupContext.Message)
                 ? popupContext.Message
                 : "offline_notice";
 
@@ -86,7 +79,7 @@ namespace Content.Scripts.Scenes.Popups
                 ? popupContext.RejectText
                 : "no";
 
-            titleText.text = !string.IsNullOrEmpty(popupContext.TitleText)
+            headerTitleText.text = !string.IsNullOrEmpty(popupContext.TitleText)
                 ? popupContext.TitleText
                 : "error";
         }

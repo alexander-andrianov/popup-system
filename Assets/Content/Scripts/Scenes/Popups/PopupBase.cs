@@ -10,35 +10,25 @@ using UnityEngine.UI;
 namespace Content.Scripts.Scenes.Popups
 {
   public abstract class PopupBase<T> : MonoBehaviour where T : PopupContext {
-    [Header("IMAGES")]
-    [SerializeField]
-    private Image backgroundImage;
-
-    [SerializeField]
-    private Image closeImage;
-
-    [SerializeField]
-    private Image clipImage;
+    [Header("IMAGES")] 
+    [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image closeImage;
+    [SerializeField] private Image clipImage;
 
     [Header("SHOW ANIMATION")]
-    [SerializeField]
-    private float durationShow = 0.15f;
-
-    [SerializeField]
-    private float delayShow = 0.1f;
-
-    [SerializeField]
-    private Ease easeShow = Ease.Linear;
+    [SerializeField] private float durationShow = 0.15f;
+    [SerializeField] private float delayShow = 0.1f;
+    [SerializeField] private Ease easeShow = Ease.Linear;
 
     [Header("CLOSE ANIMATION")]
-    [SerializeField]
-    private float durationClose = 0.15f;
-
-    [SerializeField]
-    private float delayClose = 0.23f;
-
-    [SerializeField]
-    private Ease easeClose = Ease.Linear;
+    [SerializeField] private float durationClose = 0.15f;
+    [SerializeField] private float delayClose = 0.23f;
+    [SerializeField] private Ease easeClose = Ease.Linear;
+    
+    [Header("VFX")]
+    [SerializeField] private ParticleSystem[] entryBurstParticles;
+    [SerializeField] private ParticleSystem[] constantParticles;
+    [SerializeField] private ParticleSystem[] endBurstParticles;
 
     private Tweener tweener;
 
@@ -62,6 +52,7 @@ namespace Content.Scripts.Scenes.Popups
 
     public void Initialize(T popupContext, PopupSkinAsset asset) {
       PopupContext = popupContext;
+      ScreenContext = popupContext?.ScreenContext;
       SetSkin(asset);
     }
 
@@ -74,15 +65,15 @@ namespace Content.Scripts.Scenes.Popups
 
     public abstract Task RenderAsync();
 
-    protected virtual void ShowSelf(Action callback = null) {
+    protected virtual async Task ShowSelf(Action callback = null) {
       var canvasGroup = gameObject.GetComponent<CanvasGroup>();
-
+      
       if (canvasGroup == null) {
         gameObject.AddComponent<CanvasGroup>();
       }
-
+      
       gameObject.SetActive(true);
-
+      
       tweener?.Kill();
       tweener = null;
       tweener = canvasGroup
@@ -91,15 +82,18 @@ namespace Content.Scripts.Scenes.Popups
         .SetEase(easeShow)
         .SetLink(gameObject, LinkBehaviour.CompleteAndKillOnDisable);
 
-      if (tweener == null) {
-        Dispose();
-      } else {
-        tweener.OnComplete(Dispose);
-      }
-
+      await tweener.AsyncWaitForCompletion();
+      Dispose();
+      
       void Dispose() {
         onShow?.OnNext(Unit.Default);
         callback?.Invoke();
+        
+        var particles = new ParticleSystem[entryBurstParticles.Length + constantParticles.Length];
+        entryBurstParticles.CopyTo(particles, 0);
+        constantParticles.CopyTo(particles, entryBurstParticles.Length);
+        
+        TryPlayParticles(particles);
       }
     }
 
@@ -107,13 +101,13 @@ namespace Content.Scripts.Scenes.Popups
       ScreenContext.PopupManager.Close(this as PopupBase<PopupContext>, callback);
     }
 
-    public void CloseByPopupManager(Action callback = null) {
+    public async Task CloseByPopupManager(Action callback = null) {
       var canvasGroup = gameObject.GetComponent<CanvasGroup>();
-
+      
       if (canvasGroup == null) {
         return;
       }
-
+      
       tweener?.Kill();
       tweener = null;
       tweener = canvasGroup
@@ -122,10 +116,18 @@ namespace Content.Scripts.Scenes.Popups
         .SetEase(easeClose)
         .SetLink(gameObject, LinkBehaviour.CompleteAndKillOnDisable);
 
-      if (tweener == null) {
-        DisposeImpl(callback);
-      } else {
-        tweener.OnComplete(() => DisposeImpl(callback));
+      await tweener.AsyncWaitForCompletion();
+      DisposeImpl(callback);
+    }
+
+    private void TryPlayParticles(ParticleSystem[] particleSystems)
+    {
+      if (particleSystems != null)
+      {
+        foreach (var particles in particleSystems)
+        {
+          particles.Play();
+        }
       }
     }
 
@@ -134,6 +136,7 @@ namespace Content.Scripts.Scenes.Popups
       onClose?.OnNext(Unit.Default);
 
       callback?.Invoke();
+      TryPlayParticles(endBurstParticles);
       Destroy(gameObject);
     }
 
