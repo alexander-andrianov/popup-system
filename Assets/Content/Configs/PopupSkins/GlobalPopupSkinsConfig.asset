@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5451ff887821f47d28ea3148eac427c2, type: 3}
+  m_Name: GlobalPopupSkinsConfig
+  m_EditorClassIdentifier: 
+  scenePopupSkins:
+  - ScreenType: 1
+    Skins:
+    - {fileID: 11400000, guid: e09ea60b91bde4d0897fa3dcfde2653c, type: 2}
+    - {fileID: 11400000, guid: 618e853a0f5244b0eb05e4dccce2f76d, type: 2}
+    - {fileID: 11400000, guid: e643f752466d740d2a0c7c54dda4178b, type: 2}
+  - ScreenType: 2
+    Skins:
+    - {fileID: 11400000, guid: 53f0d40b0436d4c9aba4775ceddd1b4f, type: 2}
+    - {fileID: 11400000, guid: 134ec6e5f684c4e25a15c9a36624c84f, type: 2}
+    - {fileID: 11400000, guid: 63e55cb34335a401490c1b2689863497, type: 2}
+  defaultSkin: {fileID: 11400000, guid: b0263e74a86914afda7be32685833711, type: 2}

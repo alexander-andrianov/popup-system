@@ -12,9 +12,9 @@ namespace Content.Scripts.Scenes.Popups
         public override async Task RenderAsync()
         {
             messageText.text = "Complete!";
-            ShowSelf();
+            await ShowSelf();
             await Task.Delay(TimeSpan.FromSeconds(3f));
-            CloseSelf();
+            await CloseSelf();
         }
     }
 }

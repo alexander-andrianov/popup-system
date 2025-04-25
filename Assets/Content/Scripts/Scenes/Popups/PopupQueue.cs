@@ -1,126 +1,78 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Interfaces;
 using UniRx;
 using UnityEngine;
-using System.Reflection;
-using System.Linq;
 
 namespace Content.Scripts.Scenes.Popups
 {
-    public class PopupQueue
+    public class PopupQueue : IDisposable
     {
-        private readonly Queue<Type> popupQueue = new Queue<Type>();
+        private readonly Subject<Func<Task<PopupBase<PopupContext>>>> popupSubject;
+        private readonly CompositeDisposable disposables = new CompositeDisposable();
         private readonly IPopupManager popupManager;
-        private bool isProcessing;
+        
         private bool isStarted;
-        private readonly object queueLock = new object();
 
         public PopupQueue(IPopupManager popupManager)
         {
             this.popupManager = popupManager;
+            popupSubject = new Subject<Func<Task<PopupBase<PopupContext>>>>();
         }
 
         public void StartProcessing()
         {
             if (isStarted) return;
             isStarted = true;
-            ProcessQueueAsync().Forget();
+
+            popupSubject
+                .ObserveOnMainThread()
+                .Select(openPopupFunc =>
+                {
+                    var closeSubject = new Subject<Unit>();
+                    
+                    return Observable.Defer(() => openPopupFunc().ToObservable())
+                        .ObserveOnMainThread()
+                        .Where(popup => popup != null)
+                        .SelectMany(popup =>
+                        {
+                            popup.OnClose
+                                .First()
+                                .Subscribe(_ =>
+                                {
+                                    closeSubject.OnNext(Unit.Default);
+                                    closeSubject.OnCompleted();
+                                })
+                                .AddTo(disposables);
+
+                            return closeSubject;
+                        });
+                })
+                .Concat()
+                .Subscribe(
+                    _ => { },
+                    ex => Debug.LogError($"Error in popup queue: {ex}"))
+                .AddTo(disposables);
         }
 
         public void AddToQueue<T>() where T : PopupBase<PopupContext>
         {
-            lock (queueLock)
+            if (!isStarted)
             {
-                popupQueue.Enqueue(typeof(T));
-                if (isStarted && !isProcessing)
-                {
-                    ProcessQueueAsync().Forget();
-                }
+                StartProcessing();
             }
+
+            popupSubject.OnNext(async () => 
+            {
+                var result = await popupManager.OpenAsync<T>();
+                return result;
+            });
         }
 
-        private async Task ProcessQueueAsync()
+        public void Dispose()
         {
-            if (isProcessing) return;
-            
-            lock (queueLock)
-            {
-                if (isProcessing) return;
-                isProcessing = true;
-            }
-
-            try
-            {
-                while (true)
-                {
-                    Type popupType;
-                    lock (queueLock)
-                    {
-                        if (popupQueue.Count == 0)
-                        {
-                            isProcessing = false;
-                            return;
-                        }
-                        popupType = popupQueue.Dequeue();
-                    }
-
-                    var popup = await OpenPopupOfType(popupType);
-                    if (popup != null)
-                    {
-                        await popup.OnClose.FirstOrDefault().ToTask();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Error processing popup queue: {e}");
-                isProcessing = false;
-            }
-        }
-
-        private async Task<PopupBase<PopupContext>> OpenPopupOfType(Type popupType)
-        {
-            try
-            {
-                var openMethod = typeof(PopupQueue)
-                    .GetMethod(nameof(OpenPopupTyped), BindingFlags.NonPublic | BindingFlags.Instance)
-                    ?.MakeGenericMethod(popupType);
-
-                if (openMethod == null)
-                {
-                    throw new InvalidOperationException($"Could not find OpenPopupTyped method");
-                }
-
-                return await (Task<PopupBase<PopupContext>>)openMethod.Invoke(this, Array.Empty<object>());
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Error opening popup of type {popupType}: {e}");
-                return null;
-            }
-        }
-
-        private async Task<PopupBase<PopupContext>> OpenPopupTyped<T>() where T : PopupBase<PopupContext>
-        {
-            return await popupManager.OpenAsync<T>();
-        }
-    }
-
-    public static class TaskExtensions
-    {
-        public static void Forget(this Task task)
-        {
-            if (task == null) return;
-            
-            task.ContinueWith(t =>
-            {
-                if (t.IsFaulted)
-                {
-                    Debug.LogError($"Error in forgotten task: {t.Exception}");
-                }
-            }, TaskContinuationOptions.OnlyOnFaulted);
+            disposables.Dispose();
+            popupSubject.Dispose();
         }
     }
 }

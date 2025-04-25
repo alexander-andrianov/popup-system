@@ -58,7 +58,8 @@ namespace Content.Scripts.Scenes.Popups
             SetSprite(popupContext);
             SetInteractable(true);
             SetTexts(popupContext);
-            ShowSelf();
+            
+            await ShowSelf();
         }
 
         private void SetTexts(AlertPopupContext popupContext)

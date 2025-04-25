@@ -18,7 +18,8 @@ namespace Content.Scripts.Scenes.Base.Interfaces
 
         bool IsOpened<T>() where T : PopupBase<PopupContext>;
 
-        void Close(PopupBase<PopupContext> popupBase, Action callback = null);
+        Task Close(PopupBase<PopupContext> popupBase, Action callback = null);
         void CloseAll(Action callback = null);
+        void AddToQueue<T>() where T : PopupBase<PopupContext>;
     }
 }

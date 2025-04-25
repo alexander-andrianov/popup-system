@@ -10097,9 +10097,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09b850c04e37e4e9294f95ef312228be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  popupType: 1
   backgroundImage: {fileID: 1606234132412533025}
-  closeImage: {fileID: 9002172026822548484}
-  clipImage: {fileID: 0}
+  headerImage: {fileID: 9002172026822548484}
+  closeImage: {fileID: 0}
   durationShow: 0.3
   delayShow: 0.1
   easeShow: 1

@@ -23,7 +23,6 @@ namespace Content.Scripts.Scenes.Root.Layouts
         [SerializeField] private Button alertButton;
         
         private IPopupManager popupManager;
-        private PopupQueue popupQueue;
 
         public IObservable<Unit> OnPlay => onPlay;
         public IObservable<Unit> OnSettings => onSettings;
@@ -37,11 +36,8 @@ namespace Content.Scripts.Scenes.Root.Layouts
         internal override void Initialize(IScreenContext screenContext)
         {
             popupManager = screenContext.PopupManager;
-            popupQueue = new PopupQueue(popupManager);
             InitializeButtons();
             SetButtonsInteractable(true);
-            
-            popupQueue.StartProcessing();
         }
         
         public override void SetButtonsInteractable(bool value)
@@ -74,7 +70,7 @@ namespace Content.Scripts.Scenes.Root.Layouts
 
         private void ShowPopup<T>() where T : PopupBase<PopupContext>
         {
-            popupQueue.AddToQueue<T>();
+            popupManager.AddToQueue<T>();
         }
     }
 }

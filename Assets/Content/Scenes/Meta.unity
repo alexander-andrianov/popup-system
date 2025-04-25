@@ -176,7 +176,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: -1420
+  m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -767,6 +767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupContainer: {fileID: 203367189}
+  skinsConfig: {fileID: 11400000, guid: fcf2d7278241d4865ab001f3549cea5c, type: 2}
 --- !u!4 &1312706528
 Transform:
   m_ObjectHideFlags: 0
@@ -793,6 +794,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 549787462914978138, guid: 467cdc77f2b2842999fff5df50c6fd67, type: 3}
       propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1144905278818221945, guid: 467cdc77f2b2842999fff5df50c6fd67, type: 3}
+      propertyPath: m_Alpha
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1606234132412533025, guid: 467cdc77f2b2842999fff5df50c6fd67, type: 3}

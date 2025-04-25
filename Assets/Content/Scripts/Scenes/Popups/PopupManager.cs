@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Content.Scripts.Base.Enums;
 using Content.Scripts.Scenes.Base.Interfaces;
+using UniRx;
 using UnityEngine;
 
 namespace Content.Scripts.Scenes.Popups
@@ -9,26 +11,40 @@ namespace Content.Scripts.Scenes.Popups
     public class PopupManager : MonoBehaviour, IPopupManager
     {
         [SerializeField] private Transform popupContainer;
+        [SerializeField] private PopupSkinsConfig skinsConfig;
         
         private readonly Dictionary<Type, PopupBase<PopupContext>> openedPopups = new Dictionary<Type, PopupBase<PopupContext>>();
-        private IScreenContext screenContext;
+        private IScreenContext currentScreenContext;
+        private PopupQueue popupQueue;
 
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+            popupQueue = new PopupQueue(this);
+            popupQueue.StartProcessing();
+        }
+
+        private void OnDestroy()
+        {
+            popupQueue?.Dispose();
         }
 
         public int OpenedCount => openedPopups.Count;
         public bool AnyOpened => OpenedCount > 0;
         public bool Empty => OpenedCount == 0;
 
+        public void UpdateScreenContext(IScreenContext context)
+        {
+            currentScreenContext = context;
+        }
+
         public async Task InitializeAsync(IScreenContext context)
         {
-            screenContext = context;
+            UpdateScreenContext(context);
             await Task.CompletedTask;
         }
 
-        public async Task<T> OpenAsync<T>(T loadedPrefab = null, PopupContext context = null) where T : PopupBase<PopupContext>
+        public async Task<T> OpenAsync<T>(T loadedPrefab = null, PopupContext popupContext = null) where T : PopupBase<PopupContext>
         {
             if (IsOpened<T>())
             {
@@ -47,13 +63,26 @@ namespace Content.Scripts.Scenes.Popups
             var popup = Instantiate(prefab, popupContainer);
             openedPopups[typeof(T)] = popup;
             
-            if (context == null)
+            if (popupContext == null)
             {
-                context = new PopupContext();
+                popupContext = new PopupContext() { PopupType = PopupType.Unknown };
             }
-            context.ScreenContext = screenContext;
             
-            popup.Initialize(context, null);
+            popupContext.PopupType = popup.GetPopupType();
+            var skin = skinsConfig?.GetSkinForScene(currentScreenContext.ScreenType, popupContext.PopupType);
+            
+            popup.Initialize(popupContext, skin);
+            
+            popup.OnClose
+                .First()
+                .Subscribe(_ => 
+                {
+                    if (openedPopups.ContainsKey(typeof(T)))
+                    {
+                        openedPopups.Remove(typeof(T));
+                    }
+                });
+            
             await popup.RenderAsync();
             
             return popup;
@@ -69,7 +98,7 @@ namespace Content.Scripts.Scenes.Popups
             return openedPopups.ContainsKey(typeof(T));
         }
 
-        public void Close(PopupBase<PopupContext> popupBase, Action callback = null)
+        public async Task Close(PopupBase<PopupContext> popupBase, Action callback = null)
         {
             if (popupBase == null) return;
 
@@ -77,7 +106,7 @@ namespace Content.Scripts.Scenes.Popups
             if (openedPopups.ContainsKey(type))
             {
                 openedPopups.Remove(type);
-                popupBase.CloseByPopupManager(callback);
+                await popupBase.CloseSelf(callback);
             }
         }
 
@@ -88,10 +117,15 @@ namespace Content.Scripts.Scenes.Popups
 
             foreach (var popup in popups)
             {
-                popup.CloseByPopupManager(null);
+                popup.CloseSelf(null);
             }
 
             callback?.Invoke();
+        }
+
+        public void AddToQueue<T>() where T : PopupBase<PopupContext>
+        {
+            popupQueue.AddToQueue<T>();
         }
     }
 }

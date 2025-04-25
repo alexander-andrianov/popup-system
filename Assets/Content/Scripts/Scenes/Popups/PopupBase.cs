@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Content.Scripts.Base.Enums;
 using Content.Scripts.Scenes.Base.Interfaces;
 using DG.Tweening;
 using JetBrains.Annotations;
@@ -9,11 +10,15 @@ using UnityEngine.UI;
 
 namespace Content.Scripts.Scenes.Popups
 {
-  public abstract class PopupBase<T> : MonoBehaviour where T : PopupContext {
+  public abstract class PopupBase<T> : MonoBehaviour where T : PopupContext
+  {
+    [Header("TYPE")]
+    [SerializeField] private PopupType popupType;
+    
     [Header("IMAGES")] 
     [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image headerImage;
     [SerializeField] private Image closeImage;
-    [SerializeField] private Image clipImage;
 
     [Header("SHOW ANIMATION")]
     [SerializeField] private float durationShow = 0.15f;
@@ -40,9 +45,6 @@ namespace Content.Scripts.Scenes.Popups
 
     [UsedImplicitly]
     protected CompositeDisposable CloseDisposable { get; } = new CompositeDisposable();
-    
-    [UsedImplicitly]
-    protected IScreenContext ScreenContext { get; private set; }
 
     protected T PopupContext { get; private set; }
 
@@ -52,8 +54,12 @@ namespace Content.Scripts.Scenes.Popups
 
     public void Initialize(T popupContext, PopupSkinAsset asset) {
       PopupContext = popupContext;
-      ScreenContext = popupContext?.ScreenContext;
       SetSkin(asset);
+    }
+
+    public PopupType GetPopupType()
+    {
+      return popupType;
     }
 
     public virtual void OnDestroy() {
@@ -96,12 +102,8 @@ namespace Content.Scripts.Scenes.Popups
         TryPlayParticles(particles);
       }
     }
-
-    protected virtual void CloseSelf(Action callback = null) {
-      ScreenContext.PopupManager.Close(this as PopupBase<PopupContext>, callback);
-    }
-
-    public async Task CloseByPopupManager(Action callback = null) {
+    
+    public virtual async Task CloseSelf(Action callback = null) {
       var canvasGroup = gameObject.GetComponent<CanvasGroup>();
       
       if (canvasGroup == null) {
@@ -149,12 +151,12 @@ namespace Content.Scripts.Scenes.Popups
         backgroundImage.sprite = asset.Background;
       }
 
-      if (closeImage != null) {
-        closeImage.sprite = asset.Close;
+      if (headerImage != null) {
+        headerImage.sprite = asset.Header;
       }
 
-      if (clipImage != null) {
-        clipImage.sprite = asset.Clip;
+      if (closeImage != null) {
+        closeImage.sprite = asset.Close;
       }
     }
   }

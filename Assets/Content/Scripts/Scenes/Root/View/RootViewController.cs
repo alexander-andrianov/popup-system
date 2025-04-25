@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Content.Scripts.Scenes.Base.Enums;
 using Content.Scripts.Scenes.Base.Interfaces;
 using Content.Scripts.Scenes.Root.Layouts;
 using Content.Scripts.Scenes.Popups;
@@ -28,7 +29,7 @@ namespace Content.Scripts.Scenes.Root.View
 
         private async Task InitializeScreenContext()
         {
-            screenContext = new ScreenContext { PopupManager = popupManager };
+            screenContext = new ScreenContext { PopupManager = popupManager, ScreenType = ScreenType.Meta };
             await popupManager.InitializeAsync(screenContext);
         }
 
