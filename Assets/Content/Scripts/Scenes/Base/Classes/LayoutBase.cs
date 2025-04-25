@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Interfaces;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
@@ -26,13 +26,13 @@ namespace Content.Scripts.Scenes.Base.Classes
             disposables.Dispose();
         }
 
-        public abstract Task SetLayoutVisible(bool value);
+        public abstract UniTask SetLayoutVisible(bool value);
 
         public abstract void SetButtonsInteractable(bool value);
 
         internal abstract void Initialize(IScreenContext screenContext);
 
-        internal async Task HideLayout(Transform childTransform)
+        internal async UniTask HideLayout(Transform childTransform)
         {
             await childTransform.DOScale(minScale, HideLayoutDuration).SetEase(Ease.InExpo).OnComplete(() =>
             {
@@ -42,7 +42,7 @@ namespace Content.Scripts.Scenes.Base.Classes
             }).AsyncWaitForCompletion();
         }
 
-        internal async Task ShowLayout(Transform targetTransform)
+        internal async UniTask ShowLayout(Transform targetTransform)
         {
             ChangeScale(targetTransform, minScale);
             SetEnabled(true);

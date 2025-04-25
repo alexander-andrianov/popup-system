@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Content.Scripts.Base.Enums;
 using Content.Scripts.Scenes.Base.Interfaces;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
@@ -38,13 +38,13 @@ namespace Content.Scripts.Scenes.Popups
             currentScreenContext = context;
         }
 
-        public async Task InitializeAsync(IScreenContext context)
+        public async UniTask InitializeAsync(IScreenContext context)
         {
             UpdateScreenContext(context);
-            await Task.CompletedTask;
+            await UniTask.CompletedTask;
         }
 
-        public async Task<T> OpenAsync<T>(T loadedPrefab = null, PopupContext popupContext = null) where T : PopupBase<PopupContext>
+        public async UniTask<T> OpenAsync<T>(T loadedPrefab = null, PopupContext popupContext = null) where T : PopupBase<PopupContext>
         {
             if (IsOpened<T>())
             {
@@ -88,7 +88,7 @@ namespace Content.Scripts.Scenes.Popups
             return popup;
         }
 
-        public async Task<T> OpenAsync<T>(PopupContext context) where T : PopupBase<PopupContext>
+        public async UniTask<T> OpenAsync<T>(PopupContext context) where T : PopupBase<PopupContext>
         {
             return await OpenAsync<T>(null, context);
         }
@@ -98,7 +98,7 @@ namespace Content.Scripts.Scenes.Popups
             return openedPopups.ContainsKey(typeof(T));
         }
 
-        public async Task Close(PopupBase<PopupContext> popupBase, Action callback = null)
+        public async UniTask Close(PopupBase<PopupContext> popupBase, Action callback = null)
         {
             if (popupBase == null) return;
 

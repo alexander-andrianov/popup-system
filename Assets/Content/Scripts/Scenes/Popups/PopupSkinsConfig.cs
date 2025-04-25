@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using Content.Scripts.Base.Enums;
 using Content.Scripts.Scenes.Base.Enums;
-using UnityEngine.Serialization;
 
 namespace Content.Scripts.Scenes.Popups
 {

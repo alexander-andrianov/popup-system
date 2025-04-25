@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -9,11 +9,11 @@ namespace Content.Scripts.Scenes.Popups
     {
         [SerializeField] private TextMeshProUGUI messageText;
 
-        public override async Task RenderAsync()
+        public override async UniTask RenderAsync()
         {
             messageText.text = "Complete!";
             await ShowSelf();
-            await Task.Delay(TimeSpan.FromSeconds(3f));
+            await UniTask.Delay(TimeSpan.FromSeconds(3f));
             await CloseSelf();
         }
     }

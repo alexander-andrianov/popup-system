@@ -1,7 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using Content.Scripts.Base.Enums;
-using Content.Scripts.Scenes.Base.Interfaces;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using JetBrains.Annotations;
 using UniRx;
@@ -69,9 +68,9 @@ namespace Content.Scripts.Scenes.Popups
       CloseDisposable.Dispose();
     }
 
-    public abstract Task RenderAsync();
+    public abstract UniTask RenderAsync();
 
-    protected virtual async Task ShowSelf(Action callback = null) {
+    protected virtual async UniTask ShowSelf(Action callback = null) {
       var canvasGroup = gameObject.GetComponent<CanvasGroup>();
       
       if (canvasGroup == null) {
@@ -103,7 +102,7 @@ namespace Content.Scripts.Scenes.Popups
       }
     }
     
-    public virtual async Task CloseSelf(Action callback = null) {
+    public virtual async UniTask CloseSelf(Action callback = null) {
       var canvasGroup = gameObject.GetComponent<CanvasGroup>();
       
       if (canvasGroup == null) {

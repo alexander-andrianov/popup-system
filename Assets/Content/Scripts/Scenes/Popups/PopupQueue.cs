@@ -1,6 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Interfaces;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ namespace Content.Scripts.Scenes.Popups
 {
     public class PopupQueue : IDisposable
     {
-        private readonly Subject<Func<Task<PopupBase<PopupContext>>>> popupSubject;
+        private readonly Subject<Func<UniTask<PopupBase<PopupContext>>>> popupSubject;
         private readonly CompositeDisposable disposables = new CompositeDisposable();
         private readonly IPopupManager popupManager;
         
@@ -17,7 +17,7 @@ namespace Content.Scripts.Scenes.Popups
         public PopupQueue(IPopupManager popupManager)
         {
             this.popupManager = popupManager;
-            popupSubject = new Subject<Func<Task<PopupBase<PopupContext>>>>();
+            popupSubject = new Subject<Func<UniTask<PopupBase<PopupContext>>>>();
         }
 
         public void StartProcessing()

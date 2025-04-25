@@ -1,8 +1,8 @@
 using System;
-using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Classes;
 using Content.Scripts.Scenes.Base.Interfaces;
 using Content.Scripts.Scenes.Popups;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,10 +47,10 @@ namespace Content.Scripts.Scenes.Root.Layouts
             alertButton.interactable = value;
         }
 
-        public override Task SetLayoutVisible(bool value)
+        public override UniTask SetLayoutVisible(bool value)
         {
             gameObject.SetActive(value);
-            return Task.CompletedTask;
+            return UniTask.CompletedTask;
         }
 
         private void InitializeButtons()

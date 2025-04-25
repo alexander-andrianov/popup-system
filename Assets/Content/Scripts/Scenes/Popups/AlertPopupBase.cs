@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UniRx;
 
 namespace Content.Scripts.Scenes.Popups
@@ -9,6 +9,6 @@ namespace Content.Scripts.Scenes.Popups
         public abstract IObservable<Unit> OnRetry { get; }
         public abstract IObservable<Unit> OnReject { get; }
 
-        public abstract override Task RenderAsync();
+        public abstract override UniTask RenderAsync();
     }
 }

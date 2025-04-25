@@ -1,8 +1,8 @@
-using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Enums;
 using Content.Scripts.Scenes.Base.Interfaces;
 using Content.Scripts.Scenes.Root.Layouts;
 using Content.Scripts.Scenes.Popups;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Content.Scripts.Scenes.Root.View
@@ -19,7 +19,7 @@ namespace Content.Scripts.Scenes.Root.View
 
         private int currentLevelId;
 
-        public async Task Initialize()
+        public async UniTask Initialize()
         {
             await InitializeScreenContext();
             
@@ -27,7 +27,7 @@ namespace Content.Scripts.Scenes.Root.View
             await ShowLayoutView(mainLayout);
         }
 
-        private async Task InitializeScreenContext()
+        private async UniTask InitializeScreenContext()
         {
             screenContext = new ScreenContext { PopupManager = popupManager, ScreenType = ScreenType.Meta };
             await popupManager.InitializeAsync(screenContext);
@@ -38,7 +38,7 @@ namespace Content.Scripts.Scenes.Root.View
             mainLayout.Initialize(screenContext);
         }
 
-        private async Task ShowLayoutView(ILayout layout)
+        private async UniTask ShowLayoutView(ILayout layout)
         {
             await layout.SetLayoutVisible(true);
         }

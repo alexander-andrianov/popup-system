@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Content.Scripts.Scenes.Base.Enums;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -38,7 +38,7 @@ namespace Content.Scripts.Scenes.Popups
         public override IObservable<Unit> OnRetry => onRetry;
         public override IObservable<Unit> OnReject => onReject;
 
-        public override async Task RenderAsync()
+        public override async UniTask RenderAsync()
         {
             if (!(PopupContext is AlertPopupContext popupContext))
             {
