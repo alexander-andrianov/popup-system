@@ -16,7 +16,7 @@ namespace DG.Tweening
     /// Shortcuts/functions that are not strictly related to specific Modules
     /// but are available only on some Unity versions
     /// </summary>
-	public static class DOTweenModuleUnityVersion
+	public static class DoTweenModuleUnityVersion
     {
 #if UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5 || UNITY_2017_1_OR_NEWER
         #region Unity 4.3 or Newer
@@ -27,7 +27,7 @@ namespace DG.Tweening
         /// (NOTE 1: only uses the colors of the gradient, not the alphas - NOTE 2: creates a Sequence, not a Tweener).
         /// Also stores the image as the tween's target so it can be used for filtered operations</summary>
         /// <param name="gradient">The gradient to use</param><param name="duration">The duration of the tween</param>
-        public static Sequence DOGradientColor(this Material target, Gradient gradient, float duration)
+        public static Sequence DoGradientColor(this Material target, Gradient gradient, float duration)
         {
             Sequence s = DOTween.Sequence();
             GradientColorKey[] colors = gradient.colorKeys;
@@ -52,7 +52,7 @@ namespace DG.Tweening
         /// <param name="gradient">The gradient to use</param>
         /// <param name="property">The name of the material property to tween (like _Tint or _SpecColor)</param>
         /// <param name="duration">The duration of the tween</param>
-        public static Sequence DOGradientColor(this Material target, Gradient gradient, string property, float duration)
+        public static Sequence DoGradientColor(this Material target, Gradient gradient, string property, float duration)
         {
             Sequence s = DOTween.Sequence();
             GradientColorKey[] colors = gradient.colorKeys;
@@ -93,7 +93,7 @@ namespace DG.Tweening
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);
                 return null;
             }
-            return new DOTweenCYInstruction.WaitForCompletion(t);
+            return new DoTweenCyInstruction.WaitForCompletion(t);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace DG.Tweening
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);
                 return null;
             }
-            return new DOTweenCYInstruction.WaitForRewind(t);
+            return new DoTweenCyInstruction.WaitForRewind(t);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace DG.Tweening
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);
                 return null;
             }
-            return new DOTweenCYInstruction.WaitForKill(t);
+            return new DoTweenCyInstruction.WaitForKill(t);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace DG.Tweening
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);
                 return null;
             }
-            return new DOTweenCYInstruction.WaitForElapsedLoops(t, elapsedLoops);
+            return new DoTweenCyInstruction.WaitForElapsedLoops(t, elapsedLoops);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace DG.Tweening
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);
                 return null;
             }
-            return new DOTweenCYInstruction.WaitForPosition(t, position);
+            return new DoTweenCyInstruction.WaitForPosition(t, position);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace DG.Tweening
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);
                 return null;
             }
-            return new DOTweenCYInstruction.WaitForStart(t);
+            return new DoTweenCyInstruction.WaitForStart(t);
         }
 
         #endregion
@@ -185,7 +185,7 @@ namespace DG.Tweening
         /// <param name="endValue">The end value to reach</param>
         /// <param name="propertyID">The ID of the material property to tween (also called nameID in Unity's manual)</param>
         /// <param name="duration">The duration of the tween</param>
-        public static TweenerCore<Vector2, Vector2, VectorOptions> DOOffset(this Material target, Vector2 endValue, int propertyID, float duration)
+        public static TweenerCore<Vector2, Vector2, VectorOptions> DoOffset(this Material target, Vector2 endValue, int propertyID, float duration)
         {
             if (!target.HasProperty(propertyID)) {
                 if (Debugger.logPriority > 0) Debugger.LogMissingMaterialProperty(propertyID);
@@ -201,7 +201,7 @@ namespace DG.Tweening
         /// <param name="endValue">The end value to reach</param>
         /// <param name="propertyID">The ID of the material property to tween (also called nameID in Unity's manual)</param>
         /// <param name="duration">The duration of the tween</param>
-        public static TweenerCore<Vector2, Vector2, VectorOptions> DOTiling(this Material target, Vector2 endValue, int propertyID, float duration)
+        public static TweenerCore<Vector2, Vector2, VectorOptions> DoTiling(this Material target, Vector2 endValue, int propertyID, float duration)
         {
             if (!target.HasProperty(propertyID)) {
                 if (Debugger.logPriority > 0) Debugger.LogMissingMaterialProperty(propertyID);
@@ -321,7 +321,7 @@ namespace DG.Tweening
     // █████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
 
 #if UNITY_5_3_OR_NEWER || UNITY_2017_1_OR_NEWER
-    public static class DOTweenCYInstruction
+    public static class DoTweenCyInstruction
     {
         public class WaitForCompletion : CustomYieldInstruction
         {
