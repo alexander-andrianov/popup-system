@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      noiseTexture-groovy_0: 3368292751504344853
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

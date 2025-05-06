@@ -82,7 +82,7 @@ namespace PopupSystem
             tweener?.Kill();
             tweener = null;
             tweener = canvasGroup
-                .DoFade(1.0f, durationShow)
+                .DOFade(1.0f, durationShow)
                 .SetDelay(delayShow)
                 .SetEase(easeShow)
                 .SetLink(gameObject, LinkBehaviour.CompleteAndKillOnDisable);
@@ -115,7 +115,7 @@ namespace PopupSystem
             tweener?.Kill();
             tweener = null;
             tweener = canvasGroup
-                .DoFade(0.0f, durationClose)
+                .DOFade(0.0f, durationClose)
                 .SetDelay(delayClose)
                 .SetEase(easeClose)
                 .SetLink(gameObject, LinkBehaviour.CompleteAndKillOnDisable);
