@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 
-namespace PopupSystem
+namespace PopupSystem.Runtime
 {
     internal interface ILayout
     {

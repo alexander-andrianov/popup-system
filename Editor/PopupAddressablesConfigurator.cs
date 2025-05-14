@@ -8,7 +8,7 @@ namespace PopupSystem.Editor
 {
     public static class PopupAddressablesConfigurator
     {
-        [DidReloadScripts]
+        [InitializeOnLoadMethod]
         private static void ConfigurePopups()
         {
             var popupPaths = new[]

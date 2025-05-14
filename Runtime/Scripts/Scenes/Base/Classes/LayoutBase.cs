@@ -3,7 +3,7 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 
-namespace PopupSystem
+namespace PopupSystem.Runtime
 {
     public abstract class LayoutBase : MonoBehaviour, ILayout
     {

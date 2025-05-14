@@ -1,4 +1,4 @@
-namespace PopupSystem
+namespace PopupSystem.Runtime
 {
     public interface IScreenContext
     {
