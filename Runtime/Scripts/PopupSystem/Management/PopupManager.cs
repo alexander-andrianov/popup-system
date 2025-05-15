@@ -14,6 +14,7 @@ namespace PopupSystem.Runtime
         [SerializeField] private PopupSkinsConfig skinsConfig;
 
         private readonly Dictionary<Type, PopupBase<PopupContext>> openedPopups = new();
+
         private IScreenContext currentScreenContext;
         private PopupQueue popupQueue;
 
@@ -24,24 +25,20 @@ namespace PopupSystem.Runtime
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+
             popupQueue = new PopupQueue(this);
             popupQueue.StartProcessing();
-        }
-
-        private void OnDestroy()
-        {
-            popupQueue?.Dispose();
-        }
-
-        public void UpdateScreenContext(IScreenContext context)
-        {
-            currentScreenContext = context;
         }
 
         public async UniTask InitializeAsync(IScreenContext context)
         {
             UpdateScreenContext(context);
             await UniTask.CompletedTask;
+        }
+
+        private void UpdateScreenContext(IScreenContext context)
+        {
+            currentScreenContext = context;
         }
 
         public async UniTask<T> OpenAsync<T>(T loadedPrefab = null, PopupContext popupContext = null)
@@ -146,6 +143,11 @@ namespace PopupSystem.Runtime
         public void AddToQueue<T>() where T : PopupBase<PopupContext>
         {
             popupQueue.AddToQueue<T>();
+        }
+
+        private void OnDestroy()
+        {
+            popupQueue?.Dispose();
         }
     }
 }

@@ -29,11 +29,13 @@ namespace PopupSystem.Runtime
             disposables.Dispose();
         }
 
-        internal override void Initialize(IScreenContext screenContext)
+        internal override async UniTask Initialize(IScreenContext screenContext)
         {
-            popupManager = screenContext.PopupManager;
             InitializeButtons();
             SetButtonsInteractable(true);
+
+            //TODO: add layout appearance logic
+            await UniTask.CompletedTask;
         }
 
         public override void SetButtonsInteractable(bool value)

@@ -1,14 +1,18 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace PopupSystem.Runtime
 {
     public class CoreEntry : MonoBehaviour
     {
-        [Header("VIEW")] [SerializeField] private CoreViewController rootViewController;
+        [Header("VIEW")] [SerializeField] private CoreViewController coreViewController;
 
-        private async void Start()
+        private void Start()
         {
-            await rootViewController.Initialize();
+            var screenContext = new ScreenContext();
+            screenContext.UpdateContext(ScreenType.Core);
+
+            coreViewController.Initialize(screenContext).Forget();
         }
     }
 }

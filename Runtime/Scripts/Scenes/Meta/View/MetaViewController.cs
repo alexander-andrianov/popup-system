@@ -6,29 +6,18 @@ namespace PopupSystem.Runtime
     public class MetaViewController : MonoBehaviour
     {
         [Header("LAYOUTS")] [SerializeField] private MetaLayout mainLayout;
-        [Header("MANAGERS")] [SerializeField] private PopupManager popupManager;
 
         private IScreenContext screenContext;
 
-        private int currentLevelId;
-
-        public async UniTask Initialize()
+        public async UniTask Initialize(IScreenContext context)
         {
-            await InitializeScreenContext();
-
-            InitializeLayouts();
+            await InitializeLayouts(context);
             await ShowLayoutView(mainLayout);
         }
 
-        private async UniTask InitializeScreenContext()
+        private async UniTask InitializeLayouts(IScreenContext context)
         {
-            screenContext = new ScreenContext { PopupManager = popupManager, ScreenType = ScreenType.Meta };
-            await popupManager.InitializeAsync(screenContext);
-        }
-
-        private void InitializeLayouts()
-        {
-            mainLayout.Initialize(screenContext);
+            await mainLayout.Initialize(context);
         }
 
         private async UniTask ShowLayoutView(ILayout layout)

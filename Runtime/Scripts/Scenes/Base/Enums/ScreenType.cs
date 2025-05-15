@@ -3,7 +3,10 @@ namespace PopupSystem.Runtime
     public enum ScreenType
     {
         None,
+        Core,
         Meta,
-        Core
+        Authentication,
+        Game,
+        Root,
     }
 }

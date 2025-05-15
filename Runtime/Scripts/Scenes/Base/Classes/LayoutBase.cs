@@ -29,7 +29,7 @@ namespace PopupSystem.Runtime
 
         public abstract void SetButtonsInteractable(bool value);
 
-        internal abstract void Initialize(IScreenContext screenContext);
+        internal abstract UniTask Initialize(IScreenContext screenContext);
 
         internal async UniTask HideLayout(Transform childTransform)
         {
