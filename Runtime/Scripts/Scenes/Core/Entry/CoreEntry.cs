@@ -7,12 +7,25 @@ namespace PopupSystem.Runtime
     {
         [Header("VIEW")] [SerializeField] private CoreViewController coreViewController;
 
-        private void Start()
+        private async void Start()
         {
+            var popupManager = await WaitForPopupManager();
             var screenContext = new ScreenContext();
             screenContext.UpdateContext(ScreenType.Core);
 
-            coreViewController.Initialize(screenContext).Forget();
+            await popupManager.InitializeAsync(screenContext);
+            await coreViewController.Initialize(screenContext, popupManager);
+        }
+
+        private async UniTask<PopupManager> WaitForPopupManager()
+        {
+            PopupManager manager = null;
+            while (manager == null)
+            {
+                manager = FindFirstObjectByType<PopupManager>();
+                await UniTask.Yield();
+            }
+            return manager;
         }
     }
 }

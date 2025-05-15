@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: GlobalPopupSkinsConfig
   m_EditorClassIdentifier: 
   scenePopupSkins:
-  - ScreenType: 1
-    Skins:
+  - screenType: 2
+    skins:
     - {fileID: 11400000, guid: e09ea60b91bde4d0897fa3dcfde2653c, type: 2}
     - {fileID: 11400000, guid: 618e853a0f5244b0eb05e4dccce2f76d, type: 2}
     - {fileID: 11400000, guid: e643f752466d740d2a0c7c54dda4178b, type: 2}
-  - ScreenType: 2
-    Skins:
+  - screenType: 1
+    skins:
     - {fileID: 11400000, guid: 53f0d40b0436d4c9aba4775ceddd1b4f, type: 2}
     - {fileID: 11400000, guid: 134ec6e5f684c4e25a15c9a36624c84f, type: 2}
     - {fileID: 11400000, guid: 63e55cb34335a401490c1b2689863497, type: 2}

@@ -14,7 +14,8 @@ namespace PopupSystem.Runtime
         private readonly Subject<Unit> onSettings = new Subject<Unit>();
         private readonly Subject<Unit> onExit = new Subject<Unit>();
 
-        [Header("BUTTONS")] [SerializeField] private Button completeButton;
+        [Header("BUTTONS")]
+        [SerializeField] private Button completeButton;
         [SerializeField] private Button failButton;
         [SerializeField] private Button alertButton;
 
@@ -29,8 +30,10 @@ namespace PopupSystem.Runtime
             disposables.Dispose();
         }
 
-        internal override async UniTask Initialize(IScreenContext screenContext)
+        internal override async UniTask Initialize(IScreenContext screenContext, IPopupManager popupManager)
         {
+            this.popupManager = popupManager;
+
             InitializeButtons();
             SetButtonsInteractable(true);
 

@@ -9,15 +9,15 @@ namespace PopupSystem.Runtime
 
         private IScreenContext screenContext;
 
-        public async UniTask Initialize(IScreenContext context)
+        public async UniTask Initialize(IScreenContext context, IPopupManager popupManager)
         {
-            await InitializeLayouts(context);
+            await InitializeLayouts(context, popupManager);
             await ShowLayoutView(mainLayout);
         }
 
-        private async UniTask InitializeLayouts(IScreenContext context)
+        private async UniTask InitializeLayouts(IScreenContext context, IPopupManager popupManager)
         {
-            await mainLayout.Initialize(context);
+            await mainLayout.Initialize(context, popupManager);
         }
 
         private async UniTask ShowLayoutView(ILayout layout)
