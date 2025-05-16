@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 21300000, guid: 190942c48d42b4d7b8612e0c0acd7817, type: 3}
   header: {fileID: 21300000, guid: 2484ce5c6ecea42989718d2c8333313d, type: 3}
-  close: {fileID: 0}
+  close: {fileID: 21300000, guid: 6516ab1e40cff4dafac1628134f5bfa7, type: 3}
   popupType: 3

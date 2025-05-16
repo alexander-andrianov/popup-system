@@ -1,7 +1,7 @@
 namespace PopupSystem.Runtime
 {
     public enum PopupType {
-        Unknown,
+        None,
         Complete,
         Fail,
         Alert

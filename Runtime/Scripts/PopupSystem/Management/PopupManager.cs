@@ -79,7 +79,7 @@ namespace PopupSystem.Runtime
 
             if (popupContext == null)
             {
-                popupContext = new PopupContext { PopupType = PopupType.Unknown };
+                popupContext = new PopupContext { PopupType = PopupType.None };
             }
 
             popupContext.PopupType = popup.GetPopupType();
